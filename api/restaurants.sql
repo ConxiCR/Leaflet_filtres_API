@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Temps de generació: 10-02-2021 a les 11:33:25
+-- Temps de generació: 11-02-2021 a les 21:18:35
 -- Versió del servidor: 10.4.17-MariaDB
 -- Versió de PHP: 7.4.15
 
@@ -33,14 +33,14 @@ CREATE TABLE `restaurants` (
   `address` varchar(50) NOT NULL,
   `latitud` decimal(8,6) NOT NULL,
   `longitud` decimal(8,6) NOT NULL,
-  `king_food` set('Italiana','Mediterrània','Catalana','Sense Gluten','De Mercat','Portuguesa','tapes','Japonesa') NOT NULL
+  `kind_food` set('Italiana','Mediterrània','Catalana','Sense Gluten','De Mercat','Portuguesa','tapes','Japonesa') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Bolcament de dades per a la taula `restaurants`
 --
 
-INSERT INTO `restaurants` (`id_restaurant`, `name`, `address`, `latitud`, `longitud`, `king_food`) VALUES
+INSERT INTO `restaurants` (`id_restaurant`, `name`, `address`, `latitud`, `longitud`, `kind_food`) VALUES
 (1, 'La Piazzenza', 'Avinguda de Gaudí  27', '41.407280', '2.174050', 'Italiana'),
 (2, 'Restaurant Art i Tapes', 'Carrer de Mallorca 450', '41.405510', '2.177610', 'Mediterrània'),
 (3, 'Can Josep', 'Carrer de Roger de Flor  237', '41.402870', '2.167690', 'Catalana'),
