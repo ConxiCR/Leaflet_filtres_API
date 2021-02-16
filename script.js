@@ -91,14 +91,14 @@ let fotos			= [];
 				if(filter === "all") {
 					for(i=0;i<data_markers.length; i++){
 					var marker = L.marker([data_markers[i].latitud, data_markers[i].longitud], {icon:iconoSVG}).bindPopup("<b>" + data_markers[i].name + "</b>" + 
-					"<br>" + data_markers[i].address + "<br><br>" + "Cocina " + data_markers[i].kind_food);
+					"<br>" + data_markers[i].address + "<br><br>" + "Cocina " + data_markers[i].kind_food+"<br>"+data_markers[i].fotos);
 					markers.addLayer(marker);
 					};
 				}else{
 					for(i=0;i<data_markers.length; i++){
 						if(data_markers[i].kind_food.includes(filter)){
 							var marker = L.marker([data_markers[i].latitud, data_markers[i].longitud], {icon:iconoSVG}).bindPopup("<b>" + data_markers[i].name + "</b>" + 
-							"<br>" + data_markers[i].address + "<br><br>" + "Cocina " + data_markers[i].kind_food);
+							"<br>" + data_markers[i].address + "<br><br>" + "Cocina " + data_markers[i].kind_food+"<br>"+data_markers[i].fotos);
 							markers.addLayer(marker);
 						}
 					}
