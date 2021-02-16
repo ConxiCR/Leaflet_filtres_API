@@ -64,8 +64,10 @@ let fotos			= [];
 								}
 						}
 				});	
-					//console.log(kind_food);
-					//console.log(data_markers);
+				
+				console.log("all on map");	
+				//console.log(kind_food);
+				//console.log(data_markers);
 			});
 		});
 	}
@@ -82,7 +84,7 @@ let fotos			= [];
    
 	function render_to_map(data_markers, filter) {
 
-		//limpio el cluster
+		//limpio el cluster. Es una función de Leaflet
 		markers.clearLayers();
 
 		//2) Realizo un bucle para decidir que marcadores cumplen el filtro, y los agregamos al mapa
@@ -95,7 +97,6 @@ let fotos			= [];
 					//se agregan los marcadores
 					markers.addLayer(marker);
 				});		
-		
 		}else {
 			for(let key of data_markers){
 				kind_food_selector.append(`<option value="${key}">${data_markers[key]}</option>`);
@@ -104,29 +105,41 @@ let fotos			= [];
 			console.log(data_markers);
 			
 		}	
+		/*makeMarkers(key);*/
 		
 		//agrega el MarkerClusterGroup al mapa
 		map.addLayer(markers);
-		
 	}
 
+	/*function makeMarkers(key){
+		
+		marker = new L.marker(new L.LatLng[key.latitud, key.longitud]);
+		// fill the arr for delete and add
+		data_markers.push(marker);
+		let info = (`${key.name} <br/> ${key.address}<br/> <strong>Tipo de cocina</strong>:<br/> ${key.kind_food}<br/>${key.foto}`);
+		popUp = new L.Popup({maxHeigth: 175, maxWidth: 400}).setContent(info);
+		marker.addLayer(marker.bindPopup(popUp));
+		marker.addTo(map);
+	} */
 
-	
 
-		/*L.marker(e.latlng).addTo(map)
-						.bindPopup("Estas a " + radius + " meters from this point").openPopup();
 
-		//Create circle to graphically represent location accuracy
-					L.circle(e.latlng, radius).addTo(map);
-				}
 
-		//Code for handling any errors that come up
-				function onLocationError(e) {
-					alert(e.message);
-				}
+	//##nivell 3##
+	navigator.geolocation.getCurrentPosition(
+		//obtiene posición
+		(pos)=> {
+			const {coords} = pos
+			console.log(coords)
+			L.marker([coords.latitude, coords.longitude],{icon:iconoSVG}).addTo(map);
+		},
+		(error) => {
+			console.log(error);
+		},
+		{
+			enableHighAccuracy: true,
+			timeout: 5000,
+			maximumAge: 0
 
-				map.on('locationfound', onLocationFound);
-				map.on('locationerror', onLocationError);
-
-		//Locate point and zoom to that location with a zoom level of 16
-				map.locate({setView: true, maxZoom: 16});*/
+		}
+	)
