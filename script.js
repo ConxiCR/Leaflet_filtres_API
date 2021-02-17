@@ -80,24 +80,16 @@ let fotos			= [];
 			markers.clearLayers();
 		//2) Realizo un bucle para decidir que marcadores cumplen el filtro, y los agregamos al mapa
 			$.each(data_markers,function(i){
-				var marker = L.marker([data_markers[i].latitud, data_markers[i].longitud], {icon:iconoSVG}).bindPopup("<b>" + data_markers[i].name + "</b>" + 
-				"<br>" + data_markers[i].address + "<br><br>" + "Cocina " + data_markers[i].kind_food);
-				//se agregan los marcadores
-					markers.addLayer(marker);					
-				
-					if(filter === "todos"){
-						return true;
-					}
-					
-					if(data_markers[i].kind_food.includes(filter)){
-						return false;
-					}
+				if(filter === "all" || data_markers[i].kind_food.includes(filter)){
+					var marker = L.marker([data_markers[i].latitud, data_markers[i].longitud], {icon:iconoSVG}).bindPopup("<b>" + data_markers[i].name + "</b>" + 
+					"<br>" + data_markers[i].address + "<br><br>" + "Cocina " + data_markers[i].kind_food);
+					//se agregan los marcadores
+					markers.addLayer(marker)
+				}
 			});
 			//agrega el MarkerClusterGroup al mapa
 			map.addLayer(markers);
 	}
-	
-
 	//##nivell 3##
 	navigator.geolocation.getCurrentPosition(
 		//obtiene posición
