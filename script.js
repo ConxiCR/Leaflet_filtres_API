@@ -32,11 +32,27 @@ let fotos			= [];
 				type: 'get',
 				dataType: "JSON",
 				success: function(data){
-				data_markers = data;
-				//imprimir per pantalla
-				render_to_map(data_markers, "all");
-				console.log("all on map");	
-				console.log(data);//visualitzo la base de dades
+					data_markers = data;
+					//imprimir per pantalla
+					render_to_map(data_markers, "all");
+					console.log("all on map");	
+					console.log(data);//visualitzo la base de dades
+				//2) Añado de forma dinámica en el select los posibles tipos de restaurantes	
+					data.forEach(function(value){
+						//split coloca las diferentes tipos de cocinas de los restaurantes en una lista
+						let kindFoodList = value.kind_food.split(",");
+						for(i=0;i<kindFoodList.length; i++){
+							//nos indexa toda la lista de tipos de cocina dentro de la array. Nos muestra la lista
+							if(kind_food.indexOf(kindFoodList[i])==-1){
+								kind_food.push(kindFoodList[i]);
+							}
+						}
+						//llamo al html. El select detalla la lista de eventos
+						$("#kind_food_selector").html(new Option('Todos','all'));
+						for(i=0;i<kind_food.length; i++){
+							$("#kind_food_selector").append(new Option(kind_food[i], kind_food[i]));
+						}
+					});
 				},
 				error: function (xhr, status, error) {
 					console.log(xhr); 
@@ -44,31 +60,13 @@ let fotos			= [];
 					console.log(error);
 				}
 			});
-		//2) Añado de forma dinámica en el select los posibles tipos de restaurantes
-			$.getJSON(apiRestaurants, function(data,jqXHR){
-				console.log(jqXHR);
-				data.forEach(function(value){
-					//split coloca las diferentes tipos de cocinas de los restaurantes en una lista
-					let kindFoodList = value.kind_food.split(",");
-					for(i=0;i<kindFoodList.length; i++){
-						//nos indexa toda la lista de tipos de cocina dentro de la array. Nos muestra la lista
-						if(kind_food.indexOf(kindFoodList[i])==-1){
-							kind_food.push(kindFoodList[i]);
-						}
-					}
-					//llamo al html. El select detalla la lista de eventos
-					$("#kind_food_selector").html(new Option('Todos','all'));
-					for(i=0;i<kind_food.length; i++){
-						$("#kind_food_selector").append(new Option(kind_food[i], kind_food[i]));
-					}
-				});	
+		
 				//render_to_map(data_markers, "all");	
 				//console.log(kind_food);
 				//console.log(data_markers);
-			});
+		
 		});
 	}
-	
 	$('#kind_food_selector').on('change', function() {
 		console.log(this.value);
 		render_to_map(data_markers, this.value);
@@ -81,31 +79,22 @@ let fotos			= [];
 			//limpio el cluster. Es una función de Leaflet
 			markers.clearLayers();
 		//2) Realizo un bucle para decidir que marcadores cumplen el filtro, y los agregamos al mapa
-				/*$.each(data_markers,function(i){
-					var marker = L.marker([data_markers[i].latitud, data_markers[i].longitud], {icon:iconoSVG}).bindPopup("<b>" + data_markers[i].name + "</b>" + 
-					"<br>" + data_markers[i].address + "<br><br>" + "Cocina " + data_markers[i].kind_food);
-					//se agregan los marcadores
+			$.each(data_markers,function(i){
+				var marker = L.marker([data_markers[i].latitud, data_markers[i].longitud], {icon:iconoSVG}).bindPopup("<b>" + data_markers[i].name + "</b>" + 
+				"<br>" + data_markers[i].address + "<br><br>" + "Cocina " + data_markers[i].kind_food);
+				//se agregan los marcadores
 					markers.addLayer(marker);					
-				});*/
 				
-				if(filter === "all") {
-					for(i=0;i<data_markers.length; i++){
-					var marker = L.marker([data_markers[i].latitud, data_markers[i].longitud], {icon:iconoSVG}).bindPopup("<b>" + data_markers[i].name + "</b>" + 
-					"<br>" + data_markers[i].address + "<br><br>" + "Cocina " + data_markers[i].kind_food+"<br>"+data_markers[i].fotos);
-					markers.addLayer(marker);
-					};
-				}else{
-					for(i=0;i<data_markers.length; i++){
-						if(data_markers[i].kind_food.includes(filter)){
-							var marker = L.marker([data_markers[i].latitud, data_markers[i].longitud], {icon:iconoSVG}).bindPopup("<b>" + data_markers[i].name + "</b>" + 
-							"<br>" + data_markers[i].address + "<br><br>" + "Cocina " + data_markers[i].kind_food+"<br>"+data_markers[i].fotos);
-							markers.addLayer(marker);
-						}
+					if(filter === "todos"){
+						return true;
 					}
-									
-				}
-				//agrega el MarkerClusterGroup al mapa
-				map.addLayer(markers);
+					
+					if(data_markers[i].kind_food.includes(filter)){
+						return false;
+					}
+			});
+			//agrega el MarkerClusterGroup al mapa
+			map.addLayer(markers);
 	}
 	
 
